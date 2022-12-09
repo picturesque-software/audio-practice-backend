@@ -12,7 +12,7 @@ public class AudioVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
+    private Integer aid;
     private String name;
     private String url;
     private Integer processMode;
@@ -22,6 +22,10 @@ public class AudioVO implements Serializable {
 
     public AudioVO(Audio audio){
         BeanUtils.copyProperties(audio, this);
+    }
+
+    public AudioVO(){
+
     }
 
 }

@@ -13,9 +13,12 @@ public class Result {
     private Integer articulation;
     private Integer lightNess;
     private Integer distortion;
-    private Integer score;
+    private String score;
 
     public Result(SingleResultVO singleResultVO){
         BeanUtils.copyProperties(singleResultVO, this);
+    }
+    public Result(){
+
     }
 }

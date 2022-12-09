@@ -27,4 +27,14 @@ public class AudioPairVO implements Serializable {
         this.audioList.add(audioVO1);
         this.audioList.add(audioVO2);
     }
+    public AudioPairVO(List<AudioVO> audioList) {
+        this.audioList = audioList;
+    }
+    public AudioPairVO(List<AudioVO> audioList, AudioVO referAudio){
+        this.audioList = audioList;
+        this.referAudio = referAudio;
+    }
+    public AudioPairVO(){
+
+    }
 }

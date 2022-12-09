@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 public class Audio {
     @TableId(type= IdType.AUTO)
-    private Integer id;
+    private Integer aid;
     private String name;
     private String url;
     private Integer processMode;

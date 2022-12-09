@@ -10,9 +10,9 @@ import org.springframework.beans.BeanUtils;
 import java.io.Serializable;
 import java.util.List;
 
-@TableName(value = "result_step1", autoResultMap = true)
+@TableName(value = "result_step2", autoResultMap = true)
 @Data
-public class ResultStep1 implements Serializable {
+public class ResultStep2 implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer aid;
@@ -23,12 +23,11 @@ public class ResultStep1 implements Serializable {
 
     @TableField(typeHandler = ListToStringTypeHandler.class)
     private List<String> audioOrder;
-    private Integer referAid;
 
-    public ResultStep1(SingleResultVO singleResultVO){
+    public ResultStep2(SingleResultVO singleResultVO){
         BeanUtils.copyProperties(singleResultVO, this);
     }
-    public ResultStep1(){
+    public ResultStep2(){
 
     }
 }

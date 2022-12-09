@@ -15,11 +15,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public Response<?> login(User user) {
         // TODO 根据条件查单个
-        User res=getOne(new QueryWrapper<User>().eq("username", user.getUsername()));
+        User res=getOne(new QueryWrapper<User>().eq("username", user.getUsername()).eq("password", user.getPassword()));
         if(res==null){
             return Response.error("-1","用户名或密码错误");
         }
-        return Response.success(res, "登录成功！欢迎");
+        return Response.success(new UserVO(res), "登录成功！欢迎");
     }
 
     @Override
