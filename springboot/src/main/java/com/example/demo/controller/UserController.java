@@ -29,6 +29,11 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @PostMapping("/restart")
+    public Response<?> restart(Integer uid){
+        return userService.restart(uid);
+    }
+
 }
 
 

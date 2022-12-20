@@ -9,4 +9,6 @@ public interface UserService {
     Response<?> register(User user);
 
     Response<?> getUserById(Integer id);
+
+    Response<?> restart(Integer uid);
 }
