@@ -52,16 +52,18 @@ public class StepServiceImpl implements StepService {
             Integer id = material.getId();
             // 获取该素材的参考音频
             AudioVO referAudio = new AudioVO(audioService.getReferAudio(id));
-            // 获取该素材所有前向
-            List<Audio> audioList = audioService.list(new QueryWrapper<Audio>().eq("material", id).eq("process_mode", 1));
-            int offset = audioList.size() / 2;
-            for (int i = 0; i < audioList.size() / 2; i++) {
-                AudioVO audioVO1 = new AudioVO(audioList.get(i));
-                AudioVO audioVO2 = new AudioVO(audioList.get(i + offset));
-                AudioPairVO audioPairVO = new AudioPairVO(audioVO1, audioVO2, referAudio);
-                audioPairVOList.add(audioPairVO);
+            // 获取该素材所有前向 后向
+            for(int j=1;j<=2;j++){
+                // 遍历前后向
+                List<Audio> audioList = audioService.list(new QueryWrapper<Audio>().eq("material", id).eq("process_mode", j));
+                int offset = audioList.size() / 2;
+                for (int i = 0; i < audioList.size() / 2; i++) {
+                    AudioVO audioVO1 = new AudioVO(audioList.get(i));
+                    AudioVO audioVO2 = new AudioVO(audioList.get(i + offset));
+                    AudioPairVO audioPairVO = new AudioPairVO(audioVO1, audioVO2, referAudio);
+                    audioPairVOList.add(audioPairVO);
+                }
             }
-            // TODO 获取素材所有后向
         }
         return Response.success(audioPairVOList);
     }
@@ -76,17 +78,18 @@ public class StepServiceImpl implements StepService {
         List<Material> materialList = audioService.getAllMaterial();
         for (Material material : materialList) {
             Integer mid = material.getId();
-            // 获取该素材所有前向
-            List<ResultStep1> frontResultStep1List = resultStep1List.stream().filter(obj -> Objects.equals(obj.getMaterial(), mid) && Objects.equals(obj.getProcessMode(), 1)).collect(Collectors.toList());
-            // list1: 1-0
-            List<ResultStep1> frontResultStep1List1 = frontResultStep1List.stream().filter(obj -> Objects.equals(obj.getScore(), "1-0")).collect(Collectors.toList());
-            // list2: 0-1
-            List<ResultStep1> frontResultStep1List2 = frontResultStep1List.stream().filter(obj -> Objects.equals(obj.getScore(), "0-1")).collect(Collectors.toList());
+            for(int j=1;j<=2;j++){
+                // 获取该素材所有前向
+                int finalJ = j;
+                List<ResultStep1> frontResultStep1List = resultStep1List.stream().filter(obj -> Objects.equals(obj.getMaterial(), mid) && Objects.equals(obj.getProcessMode(), finalJ)).collect(Collectors.toList());
+                // list1: 1-0
+                List<ResultStep1> frontResultStep1List1 = frontResultStep1List.stream().filter(obj -> Objects.equals(obj.getScore(), "1-0")).collect(Collectors.toList());
+                // list2: 0-1
+                List<ResultStep1> frontResultStep1List2 = frontResultStep1List.stream().filter(obj -> Objects.equals(obj.getScore(), "0-1")).collect(Collectors.toList());
 
-            audioPairVOList.addAll(getPairFromResultList(frontResultStep1List1));
-            audioPairVOList.addAll(getPairFromResultList(frontResultStep1List2));
-            // TODO 获取该素材所有后向
-
+                audioPairVOList.addAll(getPairFromResultList(frontResultStep1List1));
+                audioPairVOList.addAll(getPairFromResultList(frontResultStep1List2));
+            }
         }
         return Response.success(audioPairVOList);
     }
@@ -101,17 +104,19 @@ public class StepServiceImpl implements StepService {
         List<Material> materialList = audioService.getAllMaterial();
         for (Material material : materialList) {
             Integer mid = material.getId();
-            // 获取该素材所有前向
-            List<ResultStep2> frontResultStep2List = resultStep2List.stream().filter(obj -> Objects.equals(obj.getMaterial(), mid) && Objects.equals(obj.getProcessMode(), 1)).collect(Collectors.toList());
-            // list1: 2-0
-            List<ResultStep2> frontResultStep2List1 = frontResultStep2List.stream().filter(obj -> Objects.equals(obj.getScore(), "2-0")).collect(Collectors.toList());
-            // list2: 1-1
-            List<ResultStep2> frontResultStep2List2 = frontResultStep2List.stream().filter(obj -> Objects.equals(obj.getScore(), "1-1")).collect(Collectors.toList());
+            for(int j=1;j<=2;j++){
+                // 获取该素材所有前向
+                int finalJ = j;
+                List<ResultStep2> frontResultStep2List = resultStep2List.stream().filter(obj -> Objects.equals(obj.getMaterial(), mid) && Objects.equals(obj.getProcessMode(), finalJ)).collect(Collectors.toList());
+                // list1: 2-0
+                List<ResultStep2> frontResultStep2List1 = frontResultStep2List.stream().filter(obj -> Objects.equals(obj.getScore(), "2-0")).collect(Collectors.toList());
+                // list2: 1-1
+                List<ResultStep2> frontResultStep2List2 = frontResultStep2List.stream().filter(obj -> Objects.equals(obj.getScore(), "1-1")).collect(Collectors.toList());
 
-            audioPairVOList.addAll(getPairFromResultList(frontResultStep2List1));
-            audioPairVOList.addAll(getPairFromResultList(frontResultStep2List2));
-            // TODO 获取该素材所有后向
-
+                audioPairVOList.addAll(getPairFromResultList(frontResultStep2List1));
+                audioPairVOList.addAll(getPairFromResultList(frontResultStep2List2));
+                // TODO 获取该素材所有后向
+            }
         }
         return Response.success(audioPairVOList);
     }
@@ -126,23 +131,24 @@ public class StepServiceImpl implements StepService {
         List<Material> materialList = audioService.getAllMaterial();
         for (Material material : materialList) {
             Integer mid = material.getId();
-            // 获取该素材所有前向，6个2-1
-            List<ResultStep3> frontResultStep3List = resultStep3List.stream().filter(obj -> Objects.equals(obj.getMaterial(), mid) && Objects.equals(obj.getProcessMode(), 1) && Objects.equals(obj.getScore(), "2-1")).collect(Collectors.toList());
-            // 构造冒泡
-            List<AudioVO> audioVOList1 = new ArrayList<>();
-            for(int i=0;i<frontResultStep3List.size()/2;i++){
-                AudioVO audioVO = new AudioVO(audioService.getById(frontResultStep3List.get(i).getAid()));
-                audioVOList1.add(audioVO);
+            for(int j=1;j<=2;j++){
+                // 获取该素材所有前向，6个2-1
+                int finalJ = j;
+                List<ResultStep3> frontResultStep3List = resultStep3List.stream().filter(obj -> Objects.equals(obj.getMaterial(), mid) && Objects.equals(obj.getProcessMode(), finalJ) && Objects.equals(obj.getScore(), "2-1")).collect(Collectors.toList());
+                // 构造冒泡，每组三个返回给前端
+                List<AudioVO> audioVOList1 = new ArrayList<>();
+                for(int i=0;i<frontResultStep3List.size()/2;i++){
+                    AudioVO audioVO = new AudioVO(audioService.getById(frontResultStep3List.get(i).getAid()));
+                    audioVOList1.add(audioVO);
+                }
+                audioPairVOList.add(new AudioPairVO(audioVOList1));
+                List<AudioVO> audioVOList2 = new ArrayList<>();
+                for(int i=frontResultStep3List.size()/2;i<frontResultStep3List.size();i++){
+                    AudioVO audioVO = new AudioVO(audioService.getById(frontResultStep3List.get(i).getAid()));
+                    audioVOList2.add(audioVO);
+                }
+                audioPairVOList.add(new AudioPairVO(audioVOList2));
             }
-            audioPairVOList.add(new AudioPairVO(audioVOList1));
-            List<AudioVO> audioVOList2 = new ArrayList<>();
-            for(int i=frontResultStep3List.size()/2;i<frontResultStep3List.size();i++){
-                AudioVO audioVO = new AudioVO(audioService.getById(frontResultStep3List.get(i).getAid()));
-                audioVOList2.add(audioVO);
-            }
-            audioPairVOList.add(new AudioPairVO(audioVOList2));
-
-            // TODO 获取该素材所有后向
         }
         return Response.success(audioPairVOList);
     }
@@ -159,13 +165,15 @@ public class StepServiceImpl implements StepService {
         List<Material> materialList = audioService.getAllMaterial();
         for (Material material : materialList) {
             Integer mid = material.getId();
-            // 获取该素材前向，2个3-0 and 1-0
-            List<ResultStep3> frontResultStep3List = resultStep3List.stream().filter(obj -> Objects.equals(obj.getMaterial(), mid) && Objects.equals(obj.getProcessMode(), 1) && Objects.equals(obj.getScore(), "3-0")).collect(Collectors.toList());
-            List<ResultStep4> frontResultStep4List = resultStep4List.stream().filter(obj -> Objects.equals(obj.getMaterial(), mid) && Objects.equals(obj.getProcessMode(), 1) && Objects.equals(obj.getScore(), "1-0")).collect(Collectors.toList());
-            audioPairVOList.addAll(getPairFromResultList(frontResultStep3List));
-            audioPairVOList.addAll(getPairFromResultList(frontResultStep4List));
-
-            // TODO 获取该素材所有后向
+            for(int j=1;j<=2;j++){
+                // 获取该素材前向，2个3-0 and 1-0
+                int finalJ = j;
+                List<ResultStep3> frontResultStep3List = resultStep3List.stream().filter(obj -> Objects.equals(obj.getMaterial(), mid) && Objects.equals(obj.getProcessMode(), finalJ) && Objects.equals(obj.getScore(), "3-0")).collect(Collectors.toList());
+                int finalJ1 = j;
+                List<ResultStep4> frontResultStep4List = resultStep4List.stream().filter(obj -> Objects.equals(obj.getMaterial(), mid) && Objects.equals(obj.getProcessMode(), finalJ1) && Objects.equals(obj.getScore(), "1-0")).collect(Collectors.toList());
+                audioPairVOList.addAll(getPairFromResultList(frontResultStep3List));
+                audioPairVOList.addAll(getPairFromResultList(frontResultStep4List));
+            }
         }
         return Response.success(audioPairVOList);
     }
@@ -177,14 +185,14 @@ public class StepServiceImpl implements StepService {
             order.remove(singleResultVO.getReferAid());
             if (singleResultVO.getProcessMode() == 1) {
                 // 前向
-                if (order.get(0) == singleResultVO.getAid()) {
+                if (order.get(0).equals(singleResultVO.getAid())) {
                     singleResultVO.setScore("1-0");
                 } else {
                     singleResultVO.setScore("0-1");
                 }
             } else {
                 // 后向
-                if (order.get(0) == singleResultVO.getAid()) {
+                if (order.get(0).equals(singleResultVO.getAid())) {
                     singleResultVO.setScore("0-1");
                 } else {
                     singleResultVO.setScore("1-0");
@@ -211,14 +219,7 @@ public class StepServiceImpl implements StepService {
             List<Integer> order = singleResultVO.getOrder();
             // 获取上一轮分数
             ResultStep1 resultStep1 = resultStep1Mapper.selectOne(new QueryWrapper<ResultStep1>().eq("aid", singleResultVO.getAid()).eq("uid", singleResultVO.getUid()));
-            String[] splitScore = resultStep1.getScore().split("-");
-            if ((singleResultVO.getProcessMode() == 1 && order.get(0) == singleResultVO.getAid()) || (singleResultVO.getProcessMode() == 2 && order.get(1) == singleResultVO.getAid())) {
-                // 前向后向win!
-                singleResultVO.setScore(Integer.parseInt(splitScore[0]) + 1 + "-" + splitScore[1]);
-            } else {
-                // lose
-                singleResultVO.setScore(splitScore[0] + "-" + (Integer.parseInt(splitScore[1]) + 1));
-            }
+            setScoreFromLastStep(resultStep1.getScore(), singleResultVO);
             // step2 result
             ResultStep2 resultStep2 = new ResultStep2(singleResultVO);
             resultStep2.setAudioOrder(singleResultVO.getOrder().stream().map(String::valueOf).collect(Collectors.toList()));
@@ -234,7 +235,6 @@ public class StepServiceImpl implements StepService {
     @Override
     public Response<?> submitStep3(List<SingleResultVO> singleResultVOList) {
         for (SingleResultVO singleResultVO : singleResultVOList) {
-            List<Integer> order = singleResultVO.getOrder();
             // 获取上一轮分数
             ResultStep2 resultStep2 = resultStep2Mapper.selectOne(new QueryWrapper<ResultStep2>().eq("aid", singleResultVO.getAid()).eq("uid", singleResultVO.getUid()));
             setScoreFromLastStep(resultStep2.getScore(), singleResultVO);
@@ -344,7 +344,7 @@ public class StepServiceImpl implements StepService {
 
     void setScoreFromLastStep(String scoreLastStep, SingleResultVO singleResultVO){
         String[] splitScore = scoreLastStep.split("-");
-        if ((singleResultVO.getProcessMode() == 1 && singleResultVO.getOrder().get(0) == singleResultVO.getAid()) || (singleResultVO.getProcessMode() == 2 && singleResultVO.getOrder().get(1) == singleResultVO.getAid())) {
+        if ((singleResultVO.getProcessMode() == 1 && singleResultVO.getOrder().get(0).equals(singleResultVO.getAid())) || (singleResultVO.getProcessMode() == 2 && singleResultVO.getOrder().get(1).equals(singleResultVO.getAid()))) {
             // 前向后向win!
             singleResultVO.setScore(Integer.parseInt(splitScore[0]) + 1 + "-" + splitScore[1]);
         } else {
