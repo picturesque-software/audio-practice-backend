@@ -180,6 +180,11 @@ public class StepServiceImpl implements StepService {
 
     @Override
     public Response<?> submitStep1(List<SingleResultVO> singleResultVOList) {
+        SingleResultVO singleResultVO0 = singleResultVOList.get(0);
+        List<ResultStep1> resultStep1Temp = resultStep1Mapper.selectList(new QueryWrapper<ResultStep1>().eq("uid", singleResultVO0.getUid()));
+        if(!resultStep1Temp.isEmpty()){
+            return Response.error("-1","请勿重复提交！");
+        }
         for (SingleResultVO singleResultVO : singleResultVOList) {
             List<Integer> order = new ArrayList<>(singleResultVO.getOrder());
             order.remove(singleResultVO.getReferAid());
@@ -215,6 +220,11 @@ public class StepServiceImpl implements StepService {
 
     @Override
     public Response<?> submitStep2(List<SingleResultVO> singleResultVOList) {
+        SingleResultVO singleResultVO0 = singleResultVOList.get(0);
+        List<ResultStep2> resultStep2Temp = resultStep2Mapper.selectList(new QueryWrapper<ResultStep2>().eq("uid", singleResultVO0.getUid()));
+        if(!resultStep2Temp.isEmpty()){
+            return Response.error("-1","请勿重复提交！");
+        }
         for (SingleResultVO singleResultVO : singleResultVOList) {
             List<Integer> order = singleResultVO.getOrder();
             // 获取上一轮分数
@@ -234,6 +244,11 @@ public class StepServiceImpl implements StepService {
 
     @Override
     public Response<?> submitStep3(List<SingleResultVO> singleResultVOList) {
+        SingleResultVO singleResultVO0 = singleResultVOList.get(0);
+        List<ResultStep3> resultStep3Temp = resultStep3Mapper.selectList(new QueryWrapper<ResultStep3>().eq("uid", singleResultVO0.getUid()));
+        if(!resultStep3Temp.isEmpty()){
+            return Response.error("-1","请勿重复提交！");
+        }
         for (SingleResultVO singleResultVO : singleResultVOList) {
             // 获取上一轮分数
             ResultStep2 resultStep2 = resultStep2Mapper.selectOne(new QueryWrapper<ResultStep2>().eq("aid", singleResultVO.getAid()).eq("uid", singleResultVO.getUid()));
@@ -252,6 +267,10 @@ public class StepServiceImpl implements StepService {
 
     @Override
     public Response<?> submitStep4(List<AudioPairVO> audioPairVOList, Integer uid) {
+        List<ResultStep4> resultStep4Temp = resultStep4Mapper.selectList(new QueryWrapper<ResultStep4>().eq("uid", uid));
+        if(!resultStep4Temp.isEmpty()){
+            return Response.error("-1","请勿重复提交！");
+        }
         for(AudioPairVO audioPairVO : audioPairVOList){
             // get order[]
             List<Integer> order = new ArrayList<>();
@@ -284,6 +303,10 @@ public class StepServiceImpl implements StepService {
 
     @Override
     public Response<?> submitStep5(List<AudioPairVO> audioPairVOList, Integer uid) {
+        List<ResultStep5> resultStep5Temp = resultStep5Mapper.selectList(new QueryWrapper<ResultStep5>().eq("uid", uid));
+        if(!resultStep5Temp.isEmpty()){
+            return Response.error("-1","请勿重复提交！");
+        }
         for(AudioPairVO audioPairVO : audioPairVOList){
 
             for(int i=0;i<audioPairVO.getAudioList().size();i++){
