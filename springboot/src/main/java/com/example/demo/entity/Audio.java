@@ -19,4 +19,6 @@ public class Audio {
     private Integer processMode;
     private Integer algorithm;
     private Integer material;
+    private String reverb1;
+    private String reverb2;
 }

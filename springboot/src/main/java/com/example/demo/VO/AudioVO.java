@@ -19,6 +19,8 @@ public class AudioVO implements Serializable {
     private Integer algorithm;
     private Integer material;
     private String score;
+    private String reverb1;
+    private String reverb2;
 
     public AudioVO(Audio audio){
         BeanUtils.copyProperties(audio, this);

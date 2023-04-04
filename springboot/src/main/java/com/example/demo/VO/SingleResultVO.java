@@ -14,9 +14,10 @@ public class SingleResultVO implements Serializable {
     private Integer uid;
     // aid
     private Integer aid;
-    private Integer articulation;
-    private Integer lightNess;
-    private Integer distortion;
+
+    private Integer algorithm;
+    // quality 0,1,2（与参考接近）
+    private Integer quality;
     private Integer processMode;
     private List<Integer> order;
     private Integer material;
