@@ -8,12 +8,11 @@ import org.springframework.beans.BeanUtils;
 @TableName("result")
 @Data
 public class Result {
-    private Integer aid;
+    private Integer algorithm;
     private Integer uid;
-    private Integer articulation;
-    private Integer lightNess;
-    private Integer distortion;
+    private Integer quality;
     private String score;
+    private Integer processMode;
 
     public Result(SingleResultVO singleResultVO){
         BeanUtils.copyProperties(singleResultVO, this);

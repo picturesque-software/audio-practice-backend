@@ -19,6 +19,7 @@ public class ResultStep1 implements Serializable {
     private Integer uid;
     private Integer processMode;
     private Integer material;
+    private Integer algorithm;
     private String score;
 
     @TableField(typeHandler = ListToStringTypeHandler.class)
